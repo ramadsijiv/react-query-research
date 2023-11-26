@@ -8,6 +8,7 @@ import {
   SetStateAction,
   ReactNode,
   Reducer,
+  useCallback,
 } from "react"
 
 type CacheDataMyQueryType = Record<string, any>
@@ -167,6 +168,7 @@ export const useMyQuery = <DataType,>({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isFetching, setIsFetching] = useState<boolean>(false)
   const key = queryKey.join("-")
+  const fetcher = useCallback(() => queryFn(), [key])
 
   const [state, send] = useReducer<Reducer<UseMyQueryStateType<DataType>, MyQueryReducerActionType<DataType>>>(
     myQueryReducer,
@@ -199,9 +201,9 @@ export const useMyQuery = <DataType,>({
       cacheData,
       setIsLoading,
       setIsFetching,
-      queryFn,
+      queryFn: fetcher,
     })
-  }, [state, send, key, queryFn, cacheData])
+  }, [state, send, fetcher, cacheData])
 
   return { ...state, isLoading, isFetching, refetch }
 }
