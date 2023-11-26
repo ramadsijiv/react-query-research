@@ -14,7 +14,6 @@ export const ListProduct = ({
   refetch,
   page,
   setPage,
-  isFetching,
 }: ListProductPropsType): ReactElement => (
   <div className="flex items-center justify-center min-h-screen">
     <div className="text-center">
@@ -30,10 +29,11 @@ export const ListProduct = ({
           </button>
         </>
       )}
-      {isFetching && <h1 className="text-4xl mt-6 font-bold text-gray-300">Loading....</h1>}
+      {status === "idle" && <h1 className="text-4xl mt-6 font-bold text-gray-300">(Idle)</h1>}
+      {status === "pending" && <h1 className="text-4xl mt-6 font-bold text-gray-300">(Pending)</h1>}
       <div className="grid gap-6 mt-6">
-        {data &&
-          !isFetching &&
+        {status === "success" &&
+          data &&
           data.map((item, index) => {
             return (
               <div key={index} className="flex flex-col gap-2">
@@ -52,7 +52,7 @@ export const ListProduct = ({
             <ul className="inline-flex -space-x-px text-sm mt-6">
               <li>
                 <a
-                  onClick={() => page > 1 && setPage(value => value - 1)}
+                  onClick={() => page > 1 && setPage(page - 1)}
                   className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                 >
                   Previous
@@ -65,7 +65,7 @@ export const ListProduct = ({
               </li>
               <li>
                 <a
-                  onClick={() => setPage(value => value + 1)}
+                  onClick={() => setPage(page + 1)}
                   className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                 >
                   Next
@@ -74,9 +74,6 @@ export const ListProduct = ({
             </ul>
           </nav>
         </>
-      )}
-      {(status === "pending" || !data) && (
-        <h1 className="text-4xl mt-6 font-bold text-gray-300">Gaada Data (Pending).</h1>
       )}
       <div className="mt-10 flex items-center justify-center gap-x-6">
         <Link

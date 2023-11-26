@@ -1,61 +1,117 @@
-import { useState, Dispatch, SetStateAction, useCallback, useEffect } from "react"
+import { useState, Dispatch, SetStateAction, useCallback, useEffect, useReducer } from "react"
 import { ProductType } from "../type"
 import { ListProduct } from "../http"
+import { PaginationStateType } from "./normal-pagination"
 
-export type PaginationStateType = {
-  status: "pending" | "success" | "error"
+type DataType = {
   data?: ProductType[]
   error?: Error | null
-  refetch: () => void
+  status: "idle" | "pending" | "success" | "error"
   page: number
-  setPage: Dispatch<SetStateAction<number>>
-  isFetching: boolean
 }
 
-type DataSetterParamsType = {
-  queryKey: string
-  value: any
+type ActionType = {
+  type: "FETCH" | "REFETCH" | "FETCH_SUCCESS" | "FETCH_ERROR" | "CHANGE_PAGE"
+  payload?: Partial<DataType>
 }
 
-// ! Stale
+type OnChangeStateType = {
+  state: DataType
+  send: Dispatch<ActionType>
+  key: string
+  cache: Record<string, any>
+  setCache: Dispatch<SetStateAction<Record<string, any>>>
+}
+
+const reducer = (prevState: DataType, action: ActionType): DataType => {
+  switch (prevState.status) {
+    case "idle":
+      switch (action.type) {
+        case "FETCH":
+          return { ...prevState, status: "pending" }
+        default:
+          return prevState
+      }
+    case "pending":
+      switch (action.type) {
+        case "FETCH_SUCCESS":
+          return { ...prevState, status: "success", data: action.payload?.data }
+        case "FETCH_ERROR":
+          return { ...prevState, status: "error", error: action.payload?.error }
+        default:
+          return prevState
+      }
+    case "success":
+      switch (action.type) {
+        case "CHANGE_PAGE":
+          return { ...prevState, status: "pending", page: action.payload?.page ?? prevState.page }
+        default:
+          return prevState
+      }
+    case "error":
+      switch (action.type) {
+        case "CHANGE_PAGE":
+          return { ...prevState, status: "pending", page: action.payload?.page ?? prevState.page }
+        case "REFETCH":
+          return { ...prevState, status: "pending", error: undefined }
+        default:
+          return prevState
+      }
+    default:
+      return prevState
+  }
+}
+
+const onStateChange = ({ state, send, key, cache, setCache }: OnChangeStateType): void => {
+  switch (state.status) {
+    case "idle":
+      send({ type: "FETCH" })
+      break
+    case "pending":
+      if (cache[key]) {
+        send({ type: "FETCH_SUCCESS", payload: { data: cache[key] } })
+      } else {
+        ListProduct({ _limit: 5, _page: state.page })
+          .then(({ data }) => {
+            setCache(value => ({ ...value, [key]: data }))
+            send({ type: "FETCH_SUCCESS", payload: { data } })
+          })
+          .catch(error => {
+            send({ type: "FETCH_ERROR", payload: { error } })
+          })
+      }
+      break
+    default:
+      break
+  }
+}
+
 export const StalePaginationStateFn = (): PaginationStateType => {
-  const [clientData, setClientData] = useState<Record<string, any>>({})
-  const [data, setData] = useState<ProductType[]>()
-  const [status, setStatus] = useState<"pending" | "success" | "error">("pending")
-  const [page, setPage] = useState<number>(1)
-  const [isFetching, setIsFetching] = useState<boolean>(false)
-  const [error, setError] = useState<Error | null>(null)
+  const [cache, setCache] = useState<Record<string, any>>({})
+  const [state, send] = useReducer(reducer, {
+    status: "idle",
+    data: undefined,
+    error: undefined,
+    page: 1,
+  })
 
-  const fetchData = useCallback(() => {
-    if (clientData?.[`page-${page}`]) {
-      console.log("ada data di cache state")
-      setData(clientData[`page-${page}`])
-    } else {
-      setIsFetching(true)
-      ListProduct({ _limit: 5, _page: page })
-        .then(data => {
-          setClientData({ queryKey: `page-${page}`, value: data.data })
-          setStatus("success")
-          setData(data.data)
-        })
-        .catch(err => {
-          setStatus("error")
-          setError(err)
-        })
-        .finally(() => setIsFetching(false))
-    }
-  }, [page])
-
-  const refetch = () => fetchData()
+  const key = `product-${state.page}`
+  const setPage = (page: number) => send({ type: "CHANGE_PAGE", payload: { page } })
+  const refetch = () => send({ type: "REFETCH" })
 
   useEffect(() => {
-    fetchData()
-  }, [fetchData])
+    onStateChange({ state, send, key, setCache, cache })
+  }, [state, send, key, setCache, cache])
 
-  return { status, data, error, refetch, page, setPage, isFetching }
+  return { ...state, refetch, setPage }
 }
 
 /*
-1. Loading hanya di request baru, tapi data lama udah stale
-2. State management kompleks (banyak useState)
+! solved
+1. Loading hanya setiap request ke page baru saja
+2. State management lebih tertata
+
+! unsolved
+1. load ulang jika ganti halaman, contoh ke home terus balik lagi
+2. kalo data di page tertentu berubah, dan
 */
