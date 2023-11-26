@@ -45,6 +45,9 @@ const reducer = (prevState: DataType, action: ActionType): DataType => {
       switch (action.type) {
         case "CHANGE_PAGE":
           return { ...prevState, status: "pending", page: action.payload?.page ?? prevState.page }
+        // ! after revalidate, set data from payload
+        case "FETCH_SUCCESS":
+          return { ...prevState, status: "success", data: action.payload?.data }
         default:
           return prevState
       }
@@ -68,25 +71,26 @@ const onStateChange = ({ state, send, key, cache, setCache }: OnChangeStateType)
       send({ type: "FETCH" })
       break
     case "pending":
+      // ! give stale data
       if (cache[key]) {
         send({ type: "FETCH_SUCCESS", payload: { data: cache[key] } })
-      } else {
-        ListProduct({ _limit: 5, _page: state.page })
-          .then(({ data }) => {
-            setCache(value => ({ ...value, [key]: data }))
-            send({ type: "FETCH_SUCCESS", payload: { data } })
-          })
-          .catch(error => {
-            send({ type: "FETCH_ERROR", payload: { error } })
-          })
       }
+      // ! revalidate data from API
+      ListProduct({ _limit: 5, _page: state.page })
+        .then(({ data }) => {
+          setCache(value => ({ ...value, [key]: data }))
+          send({ type: "FETCH_SUCCESS", payload: { data } })
+        })
+        .catch(error => {
+          send({ type: "FETCH_ERROR", payload: { error } })
+        })
       break
     default:
       break
   }
 }
 
-export const StalePaginationStateFn = (): PaginationStateType => {
+export const SwrPaginationStateFn = (): PaginationStateType => {
   const [cache, setCache] = useState<Record<string, ProductType[]>>({})
   const [state, send] = useReducer(reducer, {
     status: "idle",
@@ -108,9 +112,10 @@ export const StalePaginationStateFn = (): PaginationStateType => {
 
 /*
 ! solved
-1. Prose loading berkurang karena hanya akan loading setiap request ke page baru saja
-2. State management lebih tertata
+1. penerapan SWR, mengurangi waktu loading (dari segi UI) + revalidasi data
 
 ! unsolved
-1. kalo data di page tertentu berubah, data di cache ga terupdate
+1. load ulang jika ganti halaman, contoh ke home terus balik lagi
+2. SWR hanya berlaku buat product page yg ada pagination saja. 
+   kalo ada page buat product detail dll harus buat lagi reducer dll nya.
 */
