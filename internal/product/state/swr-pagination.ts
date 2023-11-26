@@ -45,7 +45,7 @@ const reducer = (prevState: DataType, action: ActionType): DataType => {
       switch (action.type) {
         case "CHANGE_PAGE":
           return { ...prevState, status: "pending", page: action.payload?.page ?? prevState.page }
-        // ! after revalidate, set data from payload
+        // ! after revalidate success, set data from payload
         case "FETCH_SUCCESS":
           return { ...prevState, status: "success", data: action.payload?.data }
         default:
