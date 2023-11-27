@@ -3,6 +3,7 @@ import type { AppProps } from "next/app"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { MyQueryProvider } from "@/internal/base/my-query"
+
 const queryClient = new QueryClient()
 
 //  ! set default option globally
