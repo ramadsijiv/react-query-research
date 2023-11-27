@@ -1,19 +1,19 @@
 import { ReactElement } from "react"
 import { NormalPaginationStateFn } from "@/internal/product/state/normal-pagination"
-import { ListProduct } from "@/components/ListProduct"
+import { PaginationProduct } from "@/components/PaginationProduct"
 import { StalePaginationStateFn } from "@/internal/product/state/stale-pagination"
 import { SwrPaginationStateFn } from "@/internal/product/state/swr-pagination"
 import { MyQueryPaginationStateFn } from "@/internal/product/state/my-query-pagination"
 import { UseQueryPaginationStateFn } from "@/internal/product/state/use-query-pagination"
 
-const PaginationProduct = (): ReactElement => {
+const PaginationProductPage = (): ReactElement => {
   // const paginationState = NormalPaginationStateFn()
   // const paginationState = StalePaginationStateFn()
   // const paginationState = SwrPaginationStateFn()
   // const paginationState = MyQueryPaginationStateFn()
   const paginationState = UseQueryPaginationStateFn()
 
-  return <ListProduct {...paginationState} title="Normal Pagination Product Page" />
+  return <PaginationProduct {...paginationState} />
 }
 
-export default PaginationProduct
+export default PaginationProductPage

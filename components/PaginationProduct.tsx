@@ -2,14 +2,12 @@ import Link from "next/link"
 import { ReactElement } from "react"
 import { PaginationStateType } from "@/internal/product/state/normal-pagination"
 
-type ListProductPropsType = {
-  title: string
+type PaginationProductPropsType = {
   isLoading?: boolean
   isFetching?: boolean
 } & PaginationStateType
 
-export const ListProduct = ({
-  title,
+export const PaginationProduct = ({
   status,
   data,
   error,
@@ -18,10 +16,10 @@ export const ListProduct = ({
   setPage,
   isLoading,
   isFetching,
-}: ListProductPropsType): ReactElement => (
+}: PaginationProductPropsType): ReactElement => (
   <div className="flex items-center justify-center min-h-screen">
     <div className="text-center">
-      <h1 className="text-4xl mt-6 font-bold text-gray-300">{title}</h1>
+      <h1 className="text-4xl mt-6 font-bold text-gray-300">Pagination Product Page</h1>
       <div className="grid gap-6 mt-6">
         {status === "success" &&
           data &&
