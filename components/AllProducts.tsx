@@ -17,9 +17,9 @@ export const AllProducts = ({ status, data, error, refetch }: AllProductsPropsTy
         {status === "success" &&
           data &&
           data.map((item, index) => (
-            <p key={index} className="text-2xl leading-8 text-gray-300">
+            <Link key={index} href={`/product/${item.id}`} className="text-2xl leading-8 text-gray-300">
               {item.title}
-            </p>
+            </Link>
           ))}
       </div>
       {status === "error" && (
