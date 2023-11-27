@@ -21,12 +21,12 @@ export default function Home() {
         >
           Pagination Product Page
         </Link>
-        {/* <Link
-          href={`/scroll-product`}
+        <Link
+          href="/all-product"
           className="rounded-md bg-indigo-600 text-center px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          Scroll Product
-        </Link> */}
+          All Product Page
+        </Link>
       </div>
     </main>
   )

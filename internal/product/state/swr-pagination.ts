@@ -99,7 +99,7 @@ export const SwrPaginationStateFn = (): PaginationStateType => {
     page: 1,
   })
 
-  const key = `product-${state.page}`
+  const key = `products-${state.page}`
   const setPage = (page: number) => send({ type: "CHANGE_PAGE", payload: { page } })
   const refetch = () => send({ type: "REFETCH" })
 
