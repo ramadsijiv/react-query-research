@@ -45,6 +45,8 @@ type MyQueryReducerOnChangeType<DataType> = {
   send: Dispatch<MyQueryReducerActionType<DataType>>
   key: string
   queryFn: () => Promise<DataType>
+  setIsLoading: Dispatch<SetStateAction<boolean>>
+  setIsFetching: Dispatch<SetStateAction<boolean>>
 } & Pick<MyQueryContextType, "cacheData" | "setCacheData">
 
 // ! set context
@@ -119,6 +121,8 @@ const onStateChange = <DataType,>({
   cacheData,
   setCacheData,
   send,
+  setIsLoading,
+  setIsFetching,
   queryFn,
 }: MyQueryReducerOnChangeType<DataType>): void => {
   switch (state.status) {
@@ -129,8 +133,11 @@ const onStateChange = <DataType,>({
       // ! give stale data
       if (cacheData[key]) {
         send({ type: "FETCH_SUCCESS", payload: { data: cacheData[key] } })
+      } else {
+        setIsLoading(true)
       }
       // ! revalidate data from API
+      setIsFetching(true)
       queryFn()
         .then(data => {
           setCacheData(value => ({ ...value, [key]: data }))
@@ -138,6 +145,10 @@ const onStateChange = <DataType,>({
         })
         .catch(error => {
           send({ type: "FETCH_ERROR", payload: { error } })
+        })
+        .finally(() => {
+          setIsLoading(false)
+          setIsFetching(false)
         })
       break
     default:
@@ -149,9 +160,13 @@ export const useMyQuery = <DataType,>({
   queryKey,
   queryFn,
 }: UseMyQueryPropsType<DataType>): UseMyQueryStateType<DataType> & {
+  isLoading: boolean
+  isFetching: boolean
   refetch: () => void
 } => {
   const { cacheData, setCacheData, currentKey, setCurrentKey } = useMyQueryContext()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isFetching, setIsFetching] = useState<boolean>(false)
   const key = queryKey.join("-")
   const fetcher = useCallback(() => queryFn(), [key])
 
@@ -184,9 +199,11 @@ export const useMyQuery = <DataType,>({
       key,
       setCacheData,
       cacheData,
+      setIsLoading,
+      setIsFetching,
       queryFn: fetcher,
     })
   }, [state, send, fetcher, cacheData])
 
-  return { ...state, refetch }
+  return { ...state, isLoading, isFetching, refetch }
 }
