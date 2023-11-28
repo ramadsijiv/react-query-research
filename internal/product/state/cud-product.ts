@@ -40,8 +40,8 @@ export const CreateUpdateProductStateFn = (id?: number): CreateUpdateProductStat
 
   const { mutateAsync: createorUpdateProduct, ...rest } = useMutation({
     mutationFn,
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["products-crud"] })
+    onSettled: async () => {
+      return await queryClient.invalidateQueries({ queryKey: ["products-crud"] })
     },
   })
 
@@ -60,8 +60,8 @@ export const DeleteProductStateFn = () => {
 
   const queryDelete = useMutation({
     mutationFn: DeleteProduct,
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["products-crud"] })
+    onSettled: async () => {
+      return await queryClient.invalidateQueries({ queryKey: ["products-crud"] })
     },
   })
 
