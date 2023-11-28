@@ -7,10 +7,10 @@ import { MyQueryPaginationStateFn } from "@/internal/product/state/my-query-pagi
 import { UseQueryPaginationStateFn } from "@/internal/product/state/use-query-pagination"
 
 const PaginationProductPage = (): ReactElement => {
-  // const paginationState = NormalPaginationStateFn()
+  const paginationState = NormalPaginationStateFn()
   // const paginationState = StalePaginationStateFn()
   // const paginationState = SwrPaginationStateFn()
-  const paginationState = MyQueryPaginationStateFn()
+  // const paginationState = MyQueryPaginationStateFn()
   // const paginationState = UseQueryPaginationStateFn()
 
   return <PaginationProduct {...paginationState} />
