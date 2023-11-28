@@ -35,7 +35,6 @@ export const UseQueryPaginationStateFn = (): PaginationStateType => {
     // staleTime: 5000, // ! set expired / stale time
     // gcTime: 10000, // ! set garbage collection time (delete cache)
     // refetchOnWindowFocus: false, // ! default true. if false, not refetch when window focus. if 'always', wether the query stale / fresh, its still trigger refetching
-    // refetchOnMount: true // ! default true. if false, not refetch when component mount. if 'always', wether the query stale / fresh, its still trigger refetching
   })
 
   return { status, data, error, refetch, page, setPage, isFetching, isLoading }
