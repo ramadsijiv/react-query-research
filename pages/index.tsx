@@ -16,19 +16,19 @@ export default function Home() {
       </div>
       <div className="mt-10 flex items-center justify-center gap-6 flex-col lg:flex-row">
         <Link
-          href="/pagination-product"
+          href="/1-pagination-product"
           className="rounded-md bg-indigo-600 text-center px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Pagination Product Page
         </Link>
         <Link
-          href="/all-product"
+          href="/2-all-product"
           className="rounded-md bg-indigo-600 text-center px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           All Product Page
         </Link>
         <Link
-          href="/crud-product"
+          href="/3-crud-product"
           className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           CRUD Product Page

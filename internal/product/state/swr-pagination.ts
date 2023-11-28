@@ -109,13 +109,3 @@ export const SwrPaginationStateFn = (): PaginationStateType => {
 
   return { ...state, refetch, setPage }
 }
-
-/*
-! solved
-1. penerapan SWR, mengurangi waktu loading (dari segi UI) + revalidasi data
-
-! unsolved
-1. load ulang jika ganti halaman, contoh ke home terus balik lagi
-2. SWR hanya berlaku buat product page yg ada pagination saja. 
-   kalo ada page buat product detail dll harus buat lagi reducer dll nya.
-*/

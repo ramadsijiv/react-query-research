@@ -18,6 +18,12 @@ export const NormalPaginationStateFn = (): PaginationStateType => {
   const [page, setPage] = useState<number>(1)
   const [error, setError] = useState<Error | null>(null)
 
+  // const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  // useEffect(() => {
+  //   fetchSomething()
+  // }, [a,b,c,d])
+
   const fetchData = useCallback(() => {
     setStatus("pending")
     ListProduct({ _limit: 5, _page: page })
@@ -39,8 +45,3 @@ export const NormalPaginationStateFn = (): PaginationStateType => {
 
   return { status, data, error, refetch, page, setPage }
 }
-
-/*
-1. Loading setiap request
-2. State management kompleks sehingga sulit dibaca (banyak useState / useEffect)
-*/

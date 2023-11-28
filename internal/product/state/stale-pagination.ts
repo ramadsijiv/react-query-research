@@ -51,7 +51,7 @@ const reducer = (prevState: DataType, action: ActionType): DataType => {
     case "error":
       switch (action.type) {
         case "CHANGE_PAGE":
-          return { ...prevState, status: "pending", page: action.payload?.page ?? prevState.page }
+          return { ...prevState, status: "pending", page: action.payload?.page ?? prevState.page, error: undefined }
         case "REFETCH":
           return { ...prevState, status: "pending", error: undefined }
         default:
@@ -105,12 +105,3 @@ export const StalePaginationStateFn = (): PaginationStateType => {
 
   return { ...state, refetch, setPage }
 }
-
-/*
-! solved
-1. Prose loading berkurang karena hanya akan loading setiap request ke page baru saja
-2. State management lebih tertata
-
-! unsolved
-1. kalo data di page tertentu berubah, data di cache ga terupdate
-*/
