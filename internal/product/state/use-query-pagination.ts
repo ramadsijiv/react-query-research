@@ -33,7 +33,7 @@ export const UseQueryPaginationStateFn = (): PaginationStateType => {
     // enabled: false, // ! default true. if false, not automaticly fetching
     // refetchInterval: 1000, // ! default false. polling, refetch to update UI intervally (ms)
     // staleTime: 5000, // ! set expired / stale time
-    // gcTime: 10000, // ! set garbage collection time (delete cache)
+    // gcTime: 10000, // ! set garbage collection time (delete cache) *Time To Live in Redis*
     // refetchOnWindowFocus: false, // ! default true. if false, not refetch when window focus. if 'always', wether the query stale / fresh, its still trigger refetching
   })
 
