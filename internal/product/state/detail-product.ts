@@ -27,11 +27,11 @@ export const UseQueryDetailProductStateFn = (id: number): AllProductStateType =>
   const { status, data, error, refetch, isFetching, isLoading } = useQuery({
     queryKey: ["product", id],
     queryFn: () => fetchDataProduct(id),
-    initialData: () => {
-      const products: ProductType[] | undefined = queryClient.getQueryData(["products"])
-      const productId = products?.find(item => item.id === id)
-      return productId
-    },
+    // initialData: () => {
+    //   const products: ProductType[] | undefined = queryClient.getQueryData(["products"])
+    //   const productId = products?.find(item => item.id === id)
+    //   return productId
+    // },
   })
 
   return { status, data, error, refetch, isFetching, isLoading }
