@@ -179,9 +179,9 @@ export const useMyQuery = <DataType,>({
     }
   )
 
-  const refetch = () => {
+  const refetch = useCallback(() => {
     send({ type: "REFETCH" })
-  }
+  }, [])
 
   useEffect(() => {
     if (!currentKey) {
@@ -190,7 +190,7 @@ export const useMyQuery = <DataType,>({
       setCurrentKey(key)
       refetch()
     }
-  }, [key, currentKey])
+  }, [key, currentKey, refetch])
 
   useEffect(() => {
     onStateChange({
@@ -203,7 +203,7 @@ export const useMyQuery = <DataType,>({
       setIsFetching,
       queryFn: fetcher,
     })
-  }, [state, send, fetcher, cacheData])
+  }, [state, send, fetcher, cacheData, setCacheData, key])
 
   return { ...state, isLoading, isFetching, refetch }
 }
