@@ -30,7 +30,7 @@ export const UseQueryPaginationStateFn = (): PaginationStateType => {
     queryKey: ["products", page],
     queryFn: () => fetchDataProducts(page),
     // select: data => data.title, // ! select returned data
-    // enabled: false, // ! default true. if false, not automaticly fetching
+    // enabled: false, // ! default true. if false, not automaticly fetching (trigger by event, dependent query, etc)
     // refetchInterval: 1000, // ! default false. polling, refetch to update UI intervally (ms)
     // staleTime: 5000, // ! set expired / stale time
     // gcTime: 10000, // ! set garbage collection time (delete cache) *Time To Live in Redis*
