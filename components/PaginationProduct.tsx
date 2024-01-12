@@ -48,6 +48,17 @@ export const PaginationProduct = ({
       )}
       {status === "idle" && <h1 className="text-4xl mt-6 font-bold text-gray-300">(Idle)</h1>}
       {status === "pending" && <h1 className="text-4xl mt-6 font-bold text-gray-300">(Pending)</h1>}
+      {/* {status === "pending" && (
+        <>
+          <h1 className="text-4xl mt-6 font-bold text-gray-300">{error?.message}</h1>
+          <button
+            onClick={refetch}
+            className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Refetch
+          </button>
+        </>
+      )} */}
       {/* {isLoading && <h1 className="text-4xl mt-6 font-bold text-gray-300">(Loading)</h1>}
       {isFetching && <h1 className="text-4xl mt-6 font-bold text-gray-300">(Fetching)</h1>} */}
       {data && (
